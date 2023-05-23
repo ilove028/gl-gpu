@@ -1,6 +1,7 @@
 const initGPU = async (selector?: string, size?: { width: number, height: number }) => {
   let canvas: HTMLCanvasElement;
-  let context: GPUCanvasContext ;
+  let context: GPUCanvasContext;
+  let format: GPUTextureFormat;
   const gpu = navigator.gpu;
   const adapter = await gpu.requestAdapter({
     powerPreference: "high-performance"
@@ -14,6 +15,7 @@ const initGPU = async (selector?: string, size?: { width: number, height: number
   }
 
   if (selector) {
+    format = gpu.getPreferredCanvasFormat();
     canvas = <HTMLCanvasElement>document.querySelector(selector);
     context = <GPUCanvasContext>canvas.getContext("webgpu");
 
@@ -29,10 +31,10 @@ const initGPU = async (selector?: string, size?: { width: number, height: number
 
     context?.configure({
       device,
-      format: gpu.getPreferredCanvasFormat()
+      format
     })
   }
-  return { canvas, context, adapter, device, size }
+  return { gpu, canvas, context, adapter, device, size, format }
 }
 
 export {

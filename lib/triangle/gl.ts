@@ -18,6 +18,8 @@ const main = (selector: string) => {
     context.bindBuffer(context.ARRAY_BUFFER, null);
 
     const render = () => {
+      context.clearColor(0, 0, 0, 1);
+      context.clear(context.COLOR_BUFFER_BIT);
       context.viewport(0, 0, size.width, size.height);
       context.useProgram(program);
       context.bindBuffer(context.ARRAY_BUFFER, buffer);

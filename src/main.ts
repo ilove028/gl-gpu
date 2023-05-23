@@ -5,5 +5,7 @@
 // gpuMain("#gpu");
 
 import { default as glMain} from "../lib/triangle/gl";
+import { main as gpuMain } from "../lib/triangle/gpu";
 
 glMain("#gl");
+gpuMain("#gpu");

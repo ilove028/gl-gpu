@@ -2,6 +2,7 @@ import { initGPU } from "../common/gpu";
 import { vertices, indices } from "./mesh";
 import vertext from "./shader/vertex.wgsl?raw";
 import frag from "./shader/frag.wgsl?raw";
+import { loadImage } from "../common/util";
 
 const initPipeline = async (device: GPUDevice, format: GPUTextureFormat) => {
   const pipeline = await device.createRenderPipelineAsync({
@@ -48,6 +49,14 @@ const initPipeline = async (device: GPUDevice, format: GPUTextureFormat) => {
     size: 64,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   });
+  const image = await loadImage("/wall.jpg");
+  const texture = device.createTexture({
+    size: [image.width, image.height],
+    format: 'rgba8unorm',
+    usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.RENDER_ATTACHMENT
+  });
+  device.queue.copyExternalImageToTexture({ source: image, flipY: true }, { texture }, [image.width, image.height]);
+  const sampler = device.createSampler();
   const group = device.createBindGroup({
     layout: pipeline.getBindGroupLayout(0),
     entries: [
@@ -56,6 +65,14 @@ const initPipeline = async (device: GPUDevice, format: GPUTextureFormat) => {
         resource: {
           buffer: matrixBuffer
         }
+      },
+      {
+        binding: 1,
+        resource: texture.createView()
+      },
+      {
+        binding: 2,
+        resource: sampler
       }
     ]
   })

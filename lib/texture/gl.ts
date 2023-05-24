@@ -1,4 +1,5 @@
 import { initWebGL, createProgram } from "../common/gl";
+import { loadImage } from "../common/util";
 import { indices, vertices } from "./mesh";
 import vertex from "./shader/vertex.glsl?raw";
 import frag from "./shader/frag.glsl?raw";
@@ -12,8 +13,25 @@ const main = (selector: string) => {
     const buffer = context.createBuffer();
     
     const matrixLocation = context.getUniformLocation(program, "matrix");
+    const diffuseTextureLocation = context.getUniformLocation(program, "diffuseTexture");
     const indicesBuffer = context.createBuffer();
-    
+    const texture = context.createTexture();
+    // TODO 不起作用
+    // context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, 1);
+    context.activeTexture(context.TEXTURE0);
+    context.bindTexture(context.TEXTURE_2D, texture);
+    context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.CLAMP_TO_EDGE);
+    context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_T, context.CLAMP_TO_EDGE);
+    context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR);
+    context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
+    context.texImage2D(context.TEXTURE_2D, 0, context.RGBA, 1, 1, 0, context.RGBA, context.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 255]))
+    loadImage("/wall.jpg")
+      .then((image) => {
+        context.activeTexture(context.TEXTURE0);
+        context.bindTexture(context.TEXTURE_2D, texture);
+        context.texImage2D(context.TEXTURE_2D, 0, context.RGB, 512, 512, 0, context.RGB, context.UNSIGNED_BYTE, image);
+      })
+
     const vao = context.createVertexArray();
     context.bindVertexArray(vao);
     context.bindBuffer(context.ARRAY_BUFFER, buffer);
@@ -44,7 +62,8 @@ const main = (selector: string) => {
           0, 0, 1, 0,
           Math.sin(time * 2 * Math.PI / 10000), 0, 0, 1
         ]
-      )
+      );
+      context.uniform1i(diffuseTextureLocation, 0);
       context.bindVertexArray(vao);
       // context.drawArrays(context.TRIANGLES, 0, 3);
       context.drawElements(context.TRIANGLES, indices.length, context.UNSIGNED_SHORT, 0);

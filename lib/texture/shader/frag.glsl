@@ -5,6 +5,8 @@ out vec4 fragColor;
 in vec4 fragPosition;
 in vec2 fragUv;
 
+uniform sampler2D diffuseTexture;
+
 void main() {
-  fragColor = vec4(fragUv, 0.0, 1.0);
+  fragColor = texture(diffuseTexture, vec2(fragUv.x, 1.0 - fragUv.y));
 }

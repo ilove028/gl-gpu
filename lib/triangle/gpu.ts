@@ -32,19 +32,43 @@ const initPipeline = async (device: GPUDevice, format: GPUTextureFormat) => {
       topology: "triangle-list"
     }
   });
-
-  return pipeline;
+  const matrixBuffer = device.createBuffer({
+    size: 64,
+    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+  });
+  const group = device.createBindGroup({
+    layout: pipeline.getBindGroupLayout(0),
+    entries: [
+      {
+        binding: 0,
+        resource: {
+          buffer: matrixBuffer
+        }
+      }
+    ]
+  })
+  return { pipeline, group, matrixBuffer };
 }
 
 const main = async (selector: string) => {
   const { device, format, context } = await initGPU(selector);
-  const pipeline = await initPipeline(device, format);
+  const { pipeline, group, matrixBuffer } = await initPipeline(device, format);
   const buffer = device.createBuffer({
     size: vertices.byteLength,
     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST
   })
   device.queue.writeBuffer(buffer, 0, vertices);
-  const render = () => {
+  const render = (time: number) => {
+    device.queue.writeBuffer(
+      matrixBuffer,
+      0,
+      new Float32Array([
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        Math.sin(time * 2 * Math.PI / 10000), 0, 0, 1
+      ])
+    );
     const commandEncoder = device.createCommandEncoder();
     const pass = commandEncoder.beginRenderPass({
       colorAttachments: [{
@@ -55,6 +79,7 @@ const main = async (selector: string) => {
       }]
     });
     pass.setPipeline(pipeline);
+    pass.setBindGroup(0, group)
     pass.setVertexBuffer(0, buffer);
     pass.draw(3);
     pass.end();
@@ -63,7 +88,7 @@ const main = async (selector: string) => {
     requestAnimationFrame(render);
   }
 
-  render()
+  render(0)
 }
 
 export {

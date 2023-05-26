@@ -15,7 +15,8 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "typeRoots": [ "./node_modules/@webgpu/types", "./node_modules/@types", "./node_modules/vite/client"]
+    "typeRoots": [ "./node_modules/@webgpu/types", "./node_modules/@types", "./node_modules/vite/client"],
+    "types": ["@webgpu/types", "vite/client"]
   },
   "include": ["src"]
 }

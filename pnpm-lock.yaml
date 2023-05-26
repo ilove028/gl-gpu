@@ -2,11 +2,13 @@ lockfileVersion: 5.3
 
 specifiers:
   '@webgpu/types': ^0.1.32
+  gl-matrix: ^3.4.3
   typescript: ^4.9.4
   vite: ^4.0.4
 
 dependencies:
   '@webgpu/types': 0.1.32
+  gl-matrix: 3.4.3
 
 devDependencies:
   typescript: 4.9.5
@@ -253,6 +255,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /gl-matrix/3.4.3:
+    resolution: {integrity: sha512-wcCp8vu8FT22BnvKVPjXa/ICBWRq/zjFfdofZy1WSpQZpphblv12/bOQLBC1rMM7SGOFS9ltVmKOHil5+Ml7gA==}
+    dev: false
 
   /nanoid/3.3.6:
     resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}

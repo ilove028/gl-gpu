@@ -3,7 +3,7 @@ import { initGPU } from "../common/gpu";
 import { vertices, indices } from "./cube";
 import vertext from "./shader/vertex.wgsl?raw";
 import frag from "./shader/frag.wgsl?raw";
-import { loadImage } from "../common/util";
+import { loadImage, addKeyBoardControl } from "../common/util";
 
 const initPipeline = async (device: GPUDevice, format: GPUTextureFormat, size: { width: number, height: number }) => {
   const pipeline = await device.createRenderPipelineAsync({
@@ -99,13 +99,14 @@ const main = async (selector: string) => {
     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST
   })
   device.queue.writeBuffer(buffer, 0, vertices);
+  const getViewMatrix = addKeyBoardControl();
   const render = (time: number) => {
     const modelMatrix = mat4.create();
-    mat4.rotateY(modelMatrix, modelMatrix, time / 10000 * Math.PI)
-    const viewMatrix = mat4.create();
-    mat4.lookAt(viewMatrix, [0, 0, 5], [0, 0, 0], [0, 1, 0]);
+    // mat4.rotateY(modelMatrix, modelMatrix, time / 10000 * Math.PI)
+    const viewMatrix = getViewMatrix();
+    // mat4.lookAt(viewMatrix, [0, 0, 5], [0, 0, 0], [0, 1, 0]);
     const projectMatrix = mat4.create();
-    mat4.perspective(projectMatrix, Math.PI / 4, (size as any).width / (size as any).height, 0.1, 50);
+    mat4.perspective(projectMatrix, Math.PI / 4, (size as any).width / (size as any).height, 0.1, 2);
     const mvpMatrix = mat4.create();
     mat4.multiply(
       mvpMatrix,

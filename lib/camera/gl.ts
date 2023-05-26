@@ -1,6 +1,6 @@
 import { mat4 } from "gl-matrix";
 import { initWebGL, createProgram } from "../common/gl";
-import { loadImage } from "../common/util";
+import { loadImage, addKeyBoardControl } from "../common/util";
 import { indices, vertices } from "./cube";
 import vertex from "./shader/vertex.glsl?raw";
 import frag from "./shader/frag.glsl?raw";
@@ -45,7 +45,7 @@ const main = (selector: string) => {
     context.bindBuffer(context.ELEMENT_ARRAY_BUFFER, indicesBuffer);
     context.bufferData(context.ELEMENT_ARRAY_BUFFER, indices, context.STATIC_DRAW);
     context.bindVertexArray(null);
-
+    const computeViewMatrix = addKeyBoardControl();
     const render = (time) => {
       context.viewport(0, 0, size.width, size.height);
       context.enable(context.DEPTH_TEST);
@@ -57,11 +57,12 @@ const main = (selector: string) => {
       // context.vertexAttribPointer(0, 3, context.FLOAT, false, 3 * vertices.BYTES_PER_ELEMENT, 0);
 
       const modelMatrix = mat4.create();
-      mat4.rotateY(modelMatrix, modelMatrix, time / 10000 * Math.PI)
-      const viewMatrix = mat4.create();
-      mat4.lookAt(viewMatrix, [0, 0, 5], [0, 0, 0], [0, 1, 0]);
+      // mat4.rotateY(modelMatrix, modelMatrix, time / 10000 * Math.PI)
+      // const viewMatrix = mat4.create();
+      // mat4.lookAt(viewMatrix, [0, 0, 5], [0, 0, 0], [0, 1, 0]);
+      const viewMatrix = computeViewMatrix();
       const projectMatrix = mat4.create();
-      mat4.perspective(projectMatrix, Math.PI / 4, size.width / size.height, 0.1, 50);
+      mat4.perspective(projectMatrix, Math.PI / 4, size.width / size.height, 0.1, 2);
       const mvpMatrix = mat4.create();
       mat4.multiply(
         mvpMatrix,

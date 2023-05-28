@@ -31,7 +31,10 @@ void main() {
   vec3 cameraDir = normalize(cameraPosition - fragPositon);
   float diffuseFactor = max(dot(normal, lightDir), 0.0);
   vec3 diffuse = light.diffuse * diffuseFactor * material.diffuse;
-  float specularFactor = pow(max(dot(normal, normalize(lightDir + cameraDir)), 0.0), material.shininess);
+  float specularFactor = pow(
+    max(dot(normal, normalize(lightDir + cameraDir)), 0.0),
+    material.shininess
+  );
   vec3 specular = light.specular * specularFactor * material.specular;
   outColor = vec4(ambient + diffuse + specular, 1.0);
 }

@@ -35,7 +35,7 @@ const main = (selector: string) => {
     context.bindBuffer(context.ARRAY_BUFFER, normalBuffer);
     context.bufferData(context.ARRAY_BUFFER, normals, context.STATIC_DRAW);
     context.enableVertexAttribArray(1);
-    context.vertexAttribPointer(1, 2, context.FLOAT, false, 2 * normals.BYTES_PER_ELEMENT, 0);
+    context.vertexAttribPointer(1, 3, context.FLOAT, false, 3 * normals.BYTES_PER_ELEMENT, 0);
     context.bindVertexArray(null);
 
     const render = (time) => {
@@ -63,11 +63,11 @@ const main = (selector: string) => {
       context.uniform3fv(materialAmbientLoc, [1, 0, 0]);
       context.uniform3fv(materialDiffuseLoc, [1, 0, 0]);
       context.uniform3fv(materialSpecularLoc, [1, 0, 0]);
-      context.uniform1f(materialShininessLoc, 32);
+      context.uniform1f(materialShininessLoc, 16);
       context.uniform3fv(lightAmbientLoc, [0.2, 0, 0]);
       context.uniform3fv(lightDiffuseLoc, [1, 0, 0]);
       context.uniform3fv(lightSpecularLoc, [0.8, 0, 0]);
-      context.uniform3fv(lightPositionLoc, [200, 200, 200]);
+      context.uniform3fv(lightPositionLoc, [300, 300, 300]);
       context.bindVertexArray(vao);
       // context.drawArrays(context.TRIANGLES, 0, 3);
       context.drawArrays(context.TRIANGLES, 0, positions.length / 3);

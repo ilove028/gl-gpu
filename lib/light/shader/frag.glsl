@@ -24,12 +24,14 @@ uniform Material material;
 uniform Light light;
 
 void main() {
+  vec3 normal = normalize(fragNormal);
+  // vec3 normal = vec3(0, 0, 1.0);
   vec3 ambient = light.ambient * material.ambient;
   vec3 lightDir = normalize(light.position - fragPositon);
   vec3 cameraDir = normalize(cameraPosition - fragPositon);
-  float diffuseFactor = max(dot(fragNormal, lightDir), 0.0);
+  float diffuseFactor = max(dot(normal, lightDir), 0.0);
   vec3 diffuse = light.diffuse * diffuseFactor * material.diffuse;
-  float specularFactor = pow(max(dot(fragNormal, normalize(lightDir + cameraDir)), 0.0), material.shininess);
+  float specularFactor = pow(max(dot(normal, normalize(lightDir + cameraDir)), 0.0), material.shininess);
   vec3 specular = light.specular * specularFactor * material.specular;
   outColor = vec4(ambient + diffuse + specular, 1.0);
 }

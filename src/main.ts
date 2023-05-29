@@ -10,8 +10,8 @@
 // glMain("#gl");
 // gpuMain("#gpu");
 
-import { default as glMain} from "../lib/camera/gl";
-import { default as gpuMain } from "../lib/camera/gpu";
+import { default as glMain} from "../lib/light/gl";
+import { default as gpuMain } from "../lib/texture/gpu";
 
 glMain("#gl");
 gpuMain("#gpu");

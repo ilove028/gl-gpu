@@ -7,6 +7,13 @@
 @group(0) @binding(10) var specularSamper: sampler;
 
 struct Light {
+  position: vec4<f32>,
+  ambient: vec4<f32>,
+  diffuse: vec4<f32>,
+  specular: vec4<f32>,
+};
+
+struct Light2 {
   position: vec3<f32>,
   ambient: vec3<f32>,
   diffuse: vec3<f32>,
@@ -21,15 +28,15 @@ struct InputData {
 
 @fragment
 fn main(input: InputData) -> @location(0) vec4<f32> {
-    var lightF: Light;
-    lightF.position = light.position;
-    // lightF.ambient = light.ambient;
-    // lightF.diffuse = light.diffuse;
-    // lightF.specular = light.specular;
+    var lightF: Light2;
+    lightF.position = light.position.xyz;
+    lightF.ambient = light.ambient.rgb;
+    lightF.diffuse = light.diffuse.rgb;
+    lightF.specular = light.specular.rgb;
     // lightF.position = vec3<f32>(1.0, 0.5, 1.0);
-    lightF.ambient = vec3<f32>(0.2, 0.2, 0.2);
-    lightF.diffuse = vec3<f32>(1.0, 1.0, 1.0);
-    lightF.specular = vec3<f32>(1.0, 1.0, 1.0);
+    // lightF.ambient = vec3<f32>(0.2, 0.2, 0.2);
+    // lightF.diffuse = vec3<f32>(1.0, 1.0, 1.0);
+    // lightF.specular = vec3<f32>(1.0, 1.0, 1.0);
 
   var normal: vec3<f32> = normalize(input.normal);
   var materialDiffuse: vec3<f32> = textureSample(diffuse, diffuseSampler, input.uv).rgb;

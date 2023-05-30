@@ -166,10 +166,10 @@ function createUniformData(modelMatrix: mat4, viewMatrix: mat4, projectMatrix: m
   result.set(normalMatrix, 64 * 3);
   result.set(
     [
-      -1, 0.5, 1, // light position
-      0.2, 0.2, 0.2, // ambient
-      1, 1, 1, // diffuse
-      1, 1, 1, // specular
+      -1, 0.5, 1, 1,// light position
+      0.5, 0.5, 0.5, 1,// ambient
+      1, 1, 1, 1,// diffuse
+      1, 1, 1, 1,// specular
     ],
     64 * 4
   );

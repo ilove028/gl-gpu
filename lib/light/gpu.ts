@@ -103,7 +103,7 @@ const initPipeline = async (device: GPUDevice, format: GPUTextureFormat, size: {
         resource: {
           buffer: uniformBuffer,
           offset: 256 * 3,
-          size: 48
+          size: 64
         }
       },
       {
@@ -157,7 +157,7 @@ const initPipeline = async (device: GPUDevice, format: GPUTextureFormat, size: {
   return { pipeline, group, uniformBuffer, depthTexture, depthView };
 }
 
-function createUniformData(modelMatrix: mat4, viewMatrix: mat4, projectMatrix: mat4, normalMatrix: mat3): Float32Array {
+function createUniformData(modelMatrix: mat4, viewMatrix: mat4, projectMatrix: mat4, normalMatrix: mat4): Float32Array {
   const result = new Float32Array(64 * 7);
   
   result.set(modelMatrix, 0);
@@ -166,7 +166,7 @@ function createUniformData(modelMatrix: mat4, viewMatrix: mat4, projectMatrix: m
   result.set(normalMatrix, 64 * 3);
   result.set(
     [
-      1, 0.5, 1, // light position
+      -1, 0.5, 1, // light position
       0.2, 0.2, 0.2, // ambient
       1, 1, 1, // diffuse
       1, 1, 1, // specular
@@ -193,8 +193,9 @@ const main = async (selector: string) => {
     mat4.lookAt(viewMatrix, [0, 0, 2], [0, 0, 0], [ 0, 1, 0]);
     const projectMatrix = mat4.create();
     mat4.perspective(projectMatrix, Math.PI / 4, (size as any).width / (size as any).height, 0.1, 10);
-    const normalMatrix = mat3.create();
-    mat3.fromMat4(normalMatrix, mat4.transpose(mat4.create(), mat4.invert(mat4.create(), modelMatrix)));
+    const normalMatrix = mat4.create();
+    // mat3.fromMat4(normalMatrix, mat4.transpose(mat4.create(), mat4.invert(mat4.create(), modelMatrix)));
+    mat4.transpose(normalMatrix, mat4.invert(mat4.create(), modelMatrix))
     const uniformData = createUniformData(modelMatrix, viewMatrix, projectMatrix, normalMatrix);
     device.queue.writeBuffer(
       uniformBuffer,

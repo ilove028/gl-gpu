@@ -26,7 +26,7 @@ fn main(input: InputData) -> @location(0) vec4<f32> {
     // lightF.ambient = light.ambient;
     // lightF.diffuse = light.diffuse;
     // lightF.specular = light.specular;
-    lightF.position = vec3<f32>(1.0, 0.5, 1.0);
+    // lightF.position = vec3<f32>(1.0, 0.5, 1.0);
     lightF.ambient = vec3<f32>(0.2, 0.2, 0.2);
     lightF.diffuse = vec3<f32>(1.0, 1.0, 1.0);
     lightF.specular = vec3<f32>(1.0, 1.0, 1.0);
@@ -42,4 +42,5 @@ fn main(input: InputData) -> @location(0) vec4<f32> {
   var specular: vec3<f32> = lightF.specular * specularFactor * textureSample(specular, specularSamper, input.uv).rgb;
 
   return vec4<f32>(ambient + diffuse + specular, 1.0);
+  // return vec4<f32>(light.specular, 1.0);
 }

@@ -1,4 +1,4 @@
-import { mat3, mat4 } from "gl-matrix";
+import { mat3, mat4, vec3 } from "gl-matrix";
 import { initGPU } from "../common/gpu";
 import { vertices } from "./mesh";
 import vertext from "./shader/vertex.wgsl?raw";
@@ -103,7 +103,7 @@ const initPipeline = async (device: GPUDevice, format: GPUTextureFormat, size: {
         resource: {
           buffer: uniformBuffer,
           offset: 256 * 3,
-          size: 64
+          size: 48
         }
       },
       {
@@ -119,7 +119,7 @@ const initPipeline = async (device: GPUDevice, format: GPUTextureFormat, size: {
         resource: {
           buffer: uniformBuffer,
           offset: 256 * 5,
-          size: 64
+          size: 12
         }
       },
       {
@@ -127,7 +127,7 @@ const initPipeline = async (device: GPUDevice, format: GPUTextureFormat, size: {
         resource: {
           buffer: uniformBuffer,
           offset: 256 * 6,
-          size: 64
+          size: 4
         }
       },
       {
@@ -173,7 +173,7 @@ function createUniformData(modelMatrix: mat4, viewMatrix: mat4, projectMatrix: m
     ],
     64 * 4
   );
-  result.set([0, 0, 2], 64 * 5); // viewPositionWc
+  result.set(vec3.negate(vec3.create(), mat4.getTranslation(vec3.create(), viewMatrix)), 64 * 5); // viewPositionWc
   result.set([32], 64 * 6); // shininess
   return result;
 }
@@ -192,7 +192,7 @@ const main = async (selector: string) => {
     const viewMatrix = mat4.create();
     mat4.lookAt(viewMatrix, [0, 0, 2], [0, 0, 0], [ 0, 1, 0]);
     const projectMatrix = mat4.create();
-    mat4.perspective(projectMatrix, Math.PI / 4, (size as any).width / (size as any).height, 0.1, 3);
+    mat4.perspective(projectMatrix, Math.PI / 4, (size as any).width / (size as any).height, 0.1, 10);
     const normalMatrix = mat3.create();
     mat3.fromMat4(normalMatrix, mat4.transpose(mat4.create(), mat4.invert(mat4.create(), modelMatrix)));
     const uniformData = createUniformData(modelMatrix, viewMatrix, projectMatrix, normalMatrix);

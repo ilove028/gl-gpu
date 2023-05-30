@@ -21,15 +21,25 @@ struct InputData {
 
 @fragment
 fn main(input: InputData) -> @location(0) vec4<f32> {
+    var lightF: Light;
+    lightF.position = light.position;
+    // lightF.ambient = light.ambient;
+    // lightF.diffuse = light.diffuse;
+    // lightF.specular = light.specular;
+    lightF.position = vec3<f32>(1.0, 0.5, 1.0);
+    lightF.ambient = vec3<f32>(0.2, 0.2, 0.2);
+    lightF.diffuse = vec3<f32>(1.0, 1.0, 1.0);
+    lightF.specular = vec3<f32>(1.0, 1.0, 1.0);
+
   var normal: vec3<f32> = normalize(input.normal);
   var materialDiffuse: vec3<f32> = textureSample(diffuse, diffuseSampler, input.uv).rgb;
-  var ambient: vec3<f32> = light.ambient * materialDiffuse;
-  var lightDirection: vec3<f32> = normalize(light.position - input.positionWc);
+  var ambient: vec3<f32> = lightF.ambient * materialDiffuse;
+  var lightDirection: vec3<f32> = normalize(lightF.position - input.positionWc);
   var diffuseFactor: f32 = max(dot(lightDirection, normal), 0.0);
-  var diffuse: vec3<f32> = light.diffuse * diffuseFactor * materialDiffuse;
+  var diffuse: vec3<f32> = lightF.diffuse * diffuseFactor * materialDiffuse;
   var viewDirection: vec3<f32> = normalize(viewPositionWc - input.positionWc);
   var specularFactor: f32 = pow(max(dot(reflect(-lightDirection, normal), viewDirection), 0.0), shininess);
-  var specular: vec3<f32> = light.specular * specularFactor * textureSample(specular, specularSamper, input.uv).rgb;
+  var specular: vec3<f32> = lightF.specular * specularFactor * textureSample(specular, specularSamper, input.uv).rgb;
 
   return vec4<f32>(ambient + diffuse + specular, 1.0);
 }

@@ -11,7 +11,7 @@
 // gpuMain("#gpu");
 
 import { default as glMain} from "../lib/light/gl";
-import { default as gpuMain } from "../lib/texture/gpu";
+import { default as gpuMain } from "../lib/light/gpu";
 
 glMain("#gl");
 gpuMain("#gpu");

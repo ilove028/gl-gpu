@@ -111,7 +111,7 @@ const main = (selector: string) => {
       
       context.uniform3fv(directionLightDirectionLoc, [-1, -1, -1]);
       context.uniform3fv(directionLightColorLoc, [1, 1, 1]);
-      context.uniform1f(directionLightDensityLoc, 0.5);
+      context.uniform1f(directionLightDensityLoc, 1);
 
       Array.from({ length: 4 }).forEach((_, index) => {
         context.uniform3fv(pointLightLocs[index].colorLoc, [1, 1, 1]);
@@ -124,7 +124,7 @@ const main = (selector: string) => {
         } else if (index === 1) {
           context.uniform3fv(pointLightLocs[index].positionLoc, [1, -1, 1]);
         }
-        context.uniform1f(pointLightLocs[index].densityLoc, 0.4);
+        context.uniform1f(pointLightLocs[index].densityLoc, 1);
         context.uniform1f(pointLightLocs[index].constantLoc, 1);
         context.uniform1f(pointLightLocs[index].linearLoc, 0.09);
         context.uniform1f(pointLightLocs[index].quadraticLoc, 0.032);
@@ -133,7 +133,7 @@ const main = (selector: string) => {
       context.uniform3fv(spotLightPositionLoc, [-1, -1, 1]);
       context.uniform3fv(spotLightColorLoc, [1, 1, 1]);
       context.uniform3fv(spotLightSpotDirectionLoc, [-1, -1, 1]);
-      context.uniform1f(spotLightDensityLoc, 0.4);
+      context.uniform1f(spotLightDensityLoc, 1);
       context.uniform1f(spotLightCutOffLoc, Math.cos(12.5 / 180 * Math.PI));
       context.uniform1f(spotLightOuterCutOffLoc, Math.cos(15 / 180 * Math.PI));
       context.uniform1f(spotLightConstantLoc, 1);

@@ -24,22 +24,22 @@ const main = (selector: string) => {
       .then((image) => {
         context.activeTexture(context.TEXTURE0);
         context.bindTexture(context.TEXTURE_2D, diffuseTexture);
-        context.texImage2D(context.TEXTURE_2D, 0, context.RGB, image.width, image.height, 0, context.RGB, context.UNSIGNED_BYTE, image);
+        context.texImage2D(context.TEXTURE_2D, 0, context.RGBA, image.width, image.height, 0, context.RGBA, context.UNSIGNED_BYTE, image);
       });
 
     const specularTexture = context.createTexture();
-    context.activeTexture(context.TEXTURE0);
+    context.activeTexture(context.TEXTURE0 + 1);
     context.bindTexture(context.TEXTURE_2D, diffuseTexture);
     context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.CLAMP_TO_EDGE);
     context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_T, context.CLAMP_TO_EDGE);
     context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR);
     context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
     context.texImage2D(context.TEXTURE_2D, 0, context.RGBA, 1, 1, 0, context.RGBA, context.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
-    loadImage("/container2.png")
+    loadImage("/container2_specular.png")
       .then((image) => {
-        context.activeTexture(context.TEXTURE0);
+        context.activeTexture(context.TEXTURE0 + 1);
         context.bindTexture(context.TEXTURE_2D, specularTexture);
-        context.texImage2D(context.TEXTURE_2D, 0, context.RGB, image.width, image.height, 0, context.RGB, context.UNSIGNED_BYTE, image);
+        context.texImage2D(context.TEXTURE_2D, 0, context.RGBA, image.width, image.height, 0, context.RGBA, context.UNSIGNED_BYTE, image);
       });
 
     const modelMatrixLoc = context.getUniformLocation(program, "matrix.modelMatrix");
@@ -134,12 +134,7 @@ const main = (selector: string) => {
 
       context.uniform1f(uShininessLoc, 32);
 
-      context.activeTexture(context.TEXTURE0);
-      context.bindTexture(context.TEXTURE_2D, diffuseTexture);
-      context.uniform1i(diffuseTextureLoc, 1);
-
-      context.activeTexture(context.TEXTURE0 + 1);
-      context.bindTexture(context.TEXTURE_2D, specularTexture);
+      context.uniform1i(diffuseTextureLoc, 0);
       context.uniform1i(specularTextureLoc, 1);
 
       context.bindVertexArray(vao);

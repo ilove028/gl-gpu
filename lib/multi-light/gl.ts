@@ -84,7 +84,7 @@ const main = (selector: string) => {
     context.enableVertexAttribArray(1);
     context.vertexAttribPointer(1, 3, context.FLOAT, false, 8 * vertices.BYTES_PER_ELEMENT, 3 * vertices.BYTES_PER_ELEMENT);
     context.enableVertexAttribArray(2);
-    context.vertexAttribPointer(2, 2, context.FLOAT, false, 8 * vertices.BYTES_PER_ELEMENT, 5 * vertices.BYTES_PER_ELEMENT);
+    context.vertexAttribPointer(2, 2, context.FLOAT, false, 8 * vertices.BYTES_PER_ELEMENT, 6 * vertices.BYTES_PER_ELEMENT);
     context.bindVertexArray(null);
 
     const render = (time) => {
@@ -115,7 +115,15 @@ const main = (selector: string) => {
 
       Array.from({ length: 4 }).forEach((_, index) => {
         context.uniform3fv(pointLightLocs[index].colorLoc, [1, 1, 1]);
-        context.uniform3fv(pointLightLocs[index].positionLoc, [1, 1, 1]);
+        if (index === 0) {
+          context.uniform3fv(pointLightLocs[index].positionLoc, [-1, -1, -1]);
+        } else if (index === 1) {
+          context.uniform3fv(pointLightLocs[index].positionLoc, [-1, -1, 1]);
+        } else if (index === 1) {
+          context.uniform3fv(pointLightLocs[index].positionLoc, [1, -1, -1]);
+        } else if (index === 1) {
+          context.uniform3fv(pointLightLocs[index].positionLoc, [1, -1, 1]);
+        }
         context.uniform1f(pointLightLocs[index].densityLoc, 0.4);
         context.uniform1f(pointLightLocs[index].constantLoc, 1);
         context.uniform1f(pointLightLocs[index].linearLoc, 0.09);
